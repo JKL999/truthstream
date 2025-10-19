@@ -4,6 +4,7 @@
 
 'use client';
 
+import { useEffect } from 'react';
 import { useDebateCore } from '@/app/hooks/useDebateCore';
 import SpeakerToggle from '@/app/components/SpeakerToggle';
 import LiveTranscriptDisplay from '@/app/components/LiveTranscriptDisplay';
@@ -29,6 +30,25 @@ export default function DebatePage() {
     error,
     debugMode,
   } = state;
+
+  // Spacebar hotkey for speaker toggle
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Only toggle if recording and not typing in an input
+      if (
+        e.code === 'Space' &&
+        isRecording &&
+        !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)
+      ) {
+        e.preventDefault();
+        const newSpeaker = activeSpeaker === 'A' ? 'B' : 'A';
+        actions.setActiveSpeaker(newSpeaker);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [isRecording, activeSpeaker, actions]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-slate-900 to-gray-950 text-white">
