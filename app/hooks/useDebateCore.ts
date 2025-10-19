@@ -55,6 +55,7 @@ export function useDebateCore() {
   const [isConnectedA, setIsConnectedA] = useState(false);
   const [isConnectedB, setIsConnectedB] = useState(false);
   const [activeSpeaker, setActiveSpeaker] = useState<Speaker>('A');
+  const activeSpeakerRef = useRef<Speaker>('A'); // Ref to avoid closure issues in audio callback
   const [transcripts, setTranscripts] = useState<Transcript[]>([]);
   const [verdicts, setVerdicts] = useState<Verdict[]>([]);
   const [currentTranscriptionA, setCurrentTranscriptionA] = useState('');
@@ -402,8 +403,8 @@ export function useDebateCore() {
           if (!isRecordingRef.current) return;
           const pcmData = e.inputBuffer.getChannelData(0);
 
-          // Route to active speaker session
-          const activeSession = activeSpeaker === 'A' ? sessionARef.current : sessionBRef.current;
+          // Route to active speaker session (use ref to avoid closure issues)
+          const activeSession = activeSpeakerRef.current === 'A' ? sessionARef.current : sessionBRef.current;
           activeSession?.sendRealtimeInput({ media: createBlob(pcmData) });
         };
 
@@ -469,7 +470,10 @@ export function useDebateCore() {
       setCurrentTranscriptionA('');
     }
 
+    // Update both state and ref (ref is used by audio routing callback)
     setActiveSpeaker(speaker);
+    activeSpeakerRef.current = speaker;
+
     if (isRecording) {
       updateStatus(`Switched to Speaker ${speaker}`);
     }
@@ -537,7 +541,8 @@ export function useDebateCore() {
         if (inputAnalyserRef.current) {
           inputAnalyserRef.current.update();
           const level = Math.max(...Array.from(inputAnalyserRef.current.data)) / 255;
-          if (activeSpeaker === 'A') {
+          // Use ref to avoid closure issues
+          if (activeSpeakerRef.current === 'A') {
             setAudioLevelA(level);
             setAudioLevelB(0);
           } else {
