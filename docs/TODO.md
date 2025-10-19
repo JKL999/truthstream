@@ -1,6 +1,6 @@
-# Truthstream TODO - Post-Hackathon Roadmap
+# Truthy TODO - Post-Hackathon Roadmap
 
-Tasks to complete after the MVP hackathon demo to make Truthstream production-ready.
+Tasks to complete after the MVP hackathon demo to make Truthy production-ready.
 
 ## Priority 1: Core Integrations
 
@@ -147,7 +147,7 @@ Tasks to complete after the MVP hackathon demo to make Truthstream production-re
   - [ ] `POST /api/sessions/start`
   - [ ] `POST /api/sessions/:id/claim`
   - [ ] `GET /api/sessions/:id/verdicts`
-- [ ] Publish npm package `@truthstream/client`
+- [ ] Publish npm package `@truthy/client`
 - [ ] Write integration guides (Zapier, n8n)
 
 ### Documentation
@@ -245,7 +245,7 @@ Tasks to complete after the MVP hackathon demo to make Truthstream production-re
 ## How to Contribute
 
 See open issues tagged `good first issue` or `help wanted`:
-- [GitHub Issues](https://github.com/yourusername/truthstream/issues)
+- [GitHub Issues](https://github.com/yourusername/truthy/issues)
 
 **High-impact areas**:
 - Real Vectara integration

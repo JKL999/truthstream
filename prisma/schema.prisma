@@ -1,4 +1,4 @@
-// Prisma schema for Truthstream database
+// Prisma schema for Truthy database
 // This is currently optional for the MVP; persistence can be added later
 
 generator client {

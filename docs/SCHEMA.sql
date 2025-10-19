@@ -1,4 +1,4 @@
--- SQL Schema for Truthstream Database
+-- SQL Schema for Truthy Database
 -- PostgreSQL version
 -- This mirrors the Prisma schema for reference
 

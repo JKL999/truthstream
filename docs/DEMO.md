@@ -1,6 +1,6 @@
-# Truthstream Demo Script
+# Truthy Demo Script
 
-Step-by-step guide to demonstrating Truthstream for judges, stakeholders, or hackathon presentations.
+Step-by-step guide to demonstrating Truthy for judges, stakeholders, or hackathon presentations.
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ Step-by-step guide to demonstrating Truthstream for judges, stakeholders, or hac
 ### 1. Introduction (30 seconds)
 
 **Script**:
-> "Truthstream is a real-time AI fact-checker for live debates. It listens to two speakers, detects factual claims, verifies them against trusted sources, and displays color-coded verdicts—all in under 5 seconds. Let's see it in action."
+> "Truthy is a real-time AI fact-checker for live debates. It listens to two speakers, detects factual claims, verifies them against trusted sources, and displays color-coded verdicts—all in under 5 seconds. Let's see it in action."
 
 **Screen**: Show the `/debate` page at rest (before recording starts)
 

@@ -5,7 +5,7 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Truthstream - Real-Time Debate Fact Checker',
+  title: 'Truthy - Real-Time Debate Fact Checker',
   description: 'AI-powered fact-checking for live debates using Google Gemini Realtime',
 };
 

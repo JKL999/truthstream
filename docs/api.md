@@ -1,6 +1,6 @@
 API.md — Tool & Service API Specification
 
-Project: Truthstream – Real-Time Debate Fact Checker
+Project: Truthy – Real-Time Debate Fact Checker
 Scope: Tool endpoints (called by Gemini Realtime), internal services, error model, and security.
 
 ⸻

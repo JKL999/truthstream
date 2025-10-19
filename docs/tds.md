@@ -1,6 +1,6 @@
 Technical Design Specification (TDS)
 
-Project: Truthstream – Real-Time Debate Fact Checker
+Project: Truthy – Real-Time Debate Fact Checker
 Primary model: Google Gemini Realtime (Live)
 Agents: Fetch.ai sub-agents (Vectara, Web, Context)
 Corpus: Vectara trusted index
