@@ -93,11 +93,11 @@ None - isolated change
 - **ID**: BUG-002
 - **Title**: Transcripts Not Switching Between Speakers Correctly
 - **Severity**: Critical
-- **Status**: Open
-- **Assignee**: Agent 2 (Subagent)
+- **Status**: ✅ FIXED (commit e181a2e)
+- **Assignee**: Agent 2 (Subagent) + Manual Fix
 - **Worktree**: `../truthy-bug002`
 - **Branch**: `fix/bug002-speaker-differentiation`
-- **Estimated Time**: 30 minutes
+- **Actual Time**: 45 minutes (initial fix + real fix)
 
 ### Description
 When using voice input and toggling between Speaker A and B, the UI fails to differentiate between speakers in the transcript display. All transcripts appear as one speaker for extended periods despite multiple toggles happening. The chat bubbles don't switch colors/alignment properly.
@@ -119,17 +119,34 @@ types/index.ts                          # Lines 32-37 (Transcript type)
 
 ### Root Cause Analysis
 
-**Hypothesis 1**: Turn completion timing issue
-- `turnComplete` event may not fire reliably when speaker switches
-- Current transcription buffer (`currentTranscriptionA/B`) might not clear properly
+**✅ ACTUAL ROOT CAUSE (Fixed in commit e181a2e)**:
 
-**Hypothesis 2**: Buffer management issue
-- `textBufferARef` and `textBufferBRef` (lines 87-88) accumulate text across speaker switches
-- Buffers might not be properly isolated per speaker
+**JavaScript Closure Bug in Audio Routing**
 
-**Hypothesis 3**: Session routing issue
-- Audio routed to correct session, but transcription events tagged with wrong speaker
-- `handleMessage` receives speaker param but may not use it consistently
+The critical bug was in `app/hooks/useDebateCore.ts` lines 402-409. The `onaudioprocess` callback captured the `activeSpeaker` state value at the time the callback was created (when recording started). This closure captured the initial value ('A').
+
+```typescript
+// BUGGY CODE (line 357):
+scriptProcessorNodeRef.current.onaudioprocess = (e: AudioProcessingEvent) => {
+  const activeSession = activeSpeaker === 'A' ? sessionARef.current : sessionBRef.current;
+  // ^^^ This captures activeSpeaker state at callback creation time!
+};
+```
+
+When the user toggled speakers using `setActiveSpeaker()`, React updated the state, but the **closure still had the old value**. Result: **ALL audio always routed to Session A**, never Session B.
+
+**Evidence from Console Logs**:
+All messages showed `[A] Gemini Message` even when Speaker B was selected, proving audio never reached Session B's session.
+
+**Secondary Issues** (also fixed):
+1. **Transcript buffer flushing** - Previous fix addressed finalizing transcripts on speaker switch
+2. **Audio level meter closure** - Same issue in `updateLevels` function (line 544)
+
+**The Fix**:
+- Added `activeSpeakerRef` to avoid stale closure state (line 58)
+- Updated both state AND ref when toggling (line 475)
+- Use ref in audio routing: `activeSpeakerRef.current === 'A'` (line 407)
+- Also fixed in updateLevels (line 545)
 
 ### Proposed Solution
 
