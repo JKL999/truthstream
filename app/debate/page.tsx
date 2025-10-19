@@ -83,14 +83,16 @@ export default function DebatePage() {
 
       {/* Main Content - Full Screen Transcript Display */}
       <div className="relative h-[calc(100vh-80px)]">
-        {/* Live Transcript Display (Center) */}
-        <LiveTranscriptDisplay
-          transcripts={transcripts}
-          currentTranscriptionA={currentTranscriptionA}
-          currentTranscriptionB={currentTranscriptionB}
-          activeSpeaker={activeSpeaker}
-          isRecording={isRecording}
-        />
+        {/* Live Transcript Display (Center) - Add right padding to prevent overlap with verdict panel */}
+        <div className="pr-[360px]">
+          <LiveTranscriptDisplay
+            transcripts={transcripts}
+            currentTranscriptionA={currentTranscriptionA}
+            currentTranscriptionB={currentTranscriptionB}
+            activeSpeaker={activeSpeaker}
+            isRecording={isRecording}
+          />
+        </div>
 
         {/* Controls (Bottom Overlay) */}
         <div className="absolute bottom-0 left-0 right-0 z-10">
