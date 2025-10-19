@@ -448,6 +448,27 @@ export function useDebateCore() {
   };
 
   const handleSetActiveSpeaker = (speaker: Speaker) => {
+    // Flush current transcription from the previous speaker before switching
+    if (speaker === 'A' && currentTranscriptionB.trim()) {
+      // Switching TO A, so finalize B's current transcription
+      const transcript: Transcript = {
+        speaker: 'B',
+        text: currentTranscriptionB.trim(),
+        timestamp: Date.now() - sessionStartTimeRef.current,
+      };
+      setTranscripts((prev) => [...prev, transcript]);
+      setCurrentTranscriptionB('');
+    } else if (speaker === 'B' && currentTranscriptionA.trim()) {
+      // Switching TO B, so finalize A's current transcription
+      const transcript: Transcript = {
+        speaker: 'A',
+        text: currentTranscriptionA.trim(),
+        timestamp: Date.now() - sessionStartTimeRef.current,
+      };
+      setTranscripts((prev) => [...prev, transcript]);
+      setCurrentTranscriptionA('');
+    }
+
     setActiveSpeaker(speaker);
     if (isRecording) {
       updateStatus(`Switched to Speaker ${speaker}`);
