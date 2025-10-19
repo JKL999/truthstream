@@ -174,6 +174,10 @@ export function useDebateCore() {
           setCurrentTranscriptionB('');
         }
       }
+
+      // Clear text buffer to prevent accumulated non-JSON text from interfering with future verdicts
+      const bufferRef = speaker === 'A' ? textBufferARef : textBufferBRef;
+      bufferRef.current = '';
     }
 
     // Handle audio playback
@@ -271,24 +275,6 @@ export function useDebateCore() {
               // JSON parsing failed, keep accumulating
               console.warn('JSON parsing failed:', e);
             }
-          }
-        } else {
-          // Check if this is plain transcript text (not JSON-like at all)
-          const trimmed = bufferRef.current.trim();
-          if (
-            trimmed &&
-            !trimmed.includes('{') &&
-            !trimmed.includes('"speaker"') &&
-            !trimmed.includes('```') &&
-            trimmed.length > 3 // Avoid treating "..." as transcript
-          ) {
-            const transcript: Transcript = {
-              speaker,
-              text: trimmed,
-              timestamp: Date.now() - sessionStartTimeRef.current,
-            };
-            setTranscripts((prev) => [...prev, transcript]);
-            bufferRef.current = ''; // Clear buffer after adding transcript
           }
         }
       }
