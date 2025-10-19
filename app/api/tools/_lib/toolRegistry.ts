@@ -5,7 +5,7 @@
 
 import { Type } from '@google/genai';
 
-export const TRUTHSTREAM_TOOLS = [
+export const TRUTHY_TOOLS = [
   {
     name: 'search_vectara',
     description: 'Search the trusted Vectara corpus for official/primary source evidence about a factual claim. Use precise queries with metric names, locations, and timeframes.',

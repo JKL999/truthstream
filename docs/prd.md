@@ -1,8 +1,8 @@
-🧠 Project PRD: Truthstream – Real-Time Debate Fact Checker
+🧠 Project PRD: Truthy – Real-Time Debate Fact Checker
 
 Overview
 
-Truthstream is a real-time AI fact-checking assistant designed for live debates, discussions, and podcasts. It uses Google Gemini’s Realtime API to transcribe speech, detect factual claims, verify them against trusted sources, and display concise verdicts with citations.
+Truthy is a real-time AI fact-checking assistant designed for live debates, discussions, and podcasts. It uses Google Gemini’s Realtime API to transcribe speech, detect factual claims, verify them against trusted sources, and display concise verdicts with citations.
 
 The goal is to strengthen healthy democracies by grounding public discourse in shared, verifiable truth — enabling informed dialogue and reducing misinformation during live conversations.
 
@@ -26,7 +26,7 @@ User	Needs	Example Scenario
 🧑‍💼 Debate Hosts / Moderators	Keep debates factual and fair	Moderating a university debate
 🧑‍🏫 Journalists & Podcasters	Verify guests’ claims in real time	Live podcast episode
 🧑‍⚖️ Public Institutions	Promote transparency and evidence-based discourse	Election debates
-🧑‍💻 Developers / Researchers	Build civic-tech integrations	Integrate Truthstream into civic streaming tools
+🧑‍💻 Developers / Researchers	Build civic-tech integrations	Integrate Truthy into civic streaming tools
 
 
 ⸻

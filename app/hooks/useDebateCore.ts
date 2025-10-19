@@ -11,7 +11,7 @@ import { createBlob, decode, decodeAudioData } from '@/lib/audio';
 import { Analyser } from '@/lib/analyser';
 import { Speaker, Transcript, Verdict, DebateCoreState, DebateCoreActions } from '@/types';
 
-const SYSTEM_INSTRUCTION = `You are Truthstream, a neutral, real-time fact-checking agent for live debates. Your verdicts are displayed to a live audience.
+const SYSTEM_INSTRUCTION = `You are Truthy, a neutral, real-time fact-checking agent for live debates. Your verdicts are displayed to a live audience.
 
 TASKS:
 1) Listen to incoming audio (automatically transcribed)
@@ -141,7 +141,7 @@ export function useDebateCore() {
     // ===== DEBUG LOGGING END =====
 
     if (message.setupComplete) {
-      updateStatus(`Speaker ${speaker} connected to Truthstream AI`);
+      updateStatus(`Speaker ${speaker} connected to Truthy AI`);
     }
 
     // Handle live audio transcription

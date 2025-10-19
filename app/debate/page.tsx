@@ -41,7 +41,7 @@ export default function DebatePage() {
                 <span className="text-xl">⚖️</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Truthstream</h1>
+                <h1 className="text-2xl font-bold">Truthy</h1>
                 <p className="text-sm text-gray-400">Real-Time Debate Fact Checker</p>
               </div>
             </div>

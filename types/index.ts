@@ -1,5 +1,5 @@
 /**
- * TypeScript type definitions for Truthstream
+ * TypeScript type definitions for Truthy
  */
 
 export type Speaker = 'A' | 'B';

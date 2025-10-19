@@ -1,8 +1,8 @@
-# Truthstream - Quick Start Guide
+# Truthy - Quick Start Guide
 
 ## 🎉 Setup Complete!
 
-Your Truthstream MVP is ready to run. Follow these steps to get started.
+Your Truthy MVP is ready to run. Follow these steps to get started.
 
 ---
 
@@ -147,7 +147,7 @@ See `docs/TODO.md` for the full post-hackathon roadmap.
 
 ## Support
 
-- **GitHub Issues**: [Report bugs](https://github.com/yourusername/truthstream/issues)
+- **GitHub Issues**: [Report bugs](https://github.com/yourusername/truthy/issues)
 - **Documentation**: See `docs/` folder
 - **Questions**: Check README.md FAQ section
 

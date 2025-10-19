@@ -1,8 +1,8 @@
-# Truthstream Architecture
+# Truthy Architecture
 
 ## System Overview
 
-Truthstream is a real-time fact-checking system that listens to live debate audio, transcribes speech, detects factual claims, verifies them against trusted sources, and displays verdicts in under 5 seconds.
+Truthy is a real-time fact-checking system that listens to live debate audio, transcribes speech, detects factual claims, verifies them against trusted sources, and displays verdicts in under 5 seconds.
 
 ## High-Level Architecture
 

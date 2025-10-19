@@ -1,10 +1,10 @@
-# Truthstream - Real-Time Debate Fact Checker
+# Truthy - Real-Time Debate Fact Checker
 
 AI-powered fact-checking for live debates using **Google Gemini Realtime API**.
 
 ## Overview
 
-Truthstream listens to two speakers in a debate, transcribes their speech in real-time, detects factual claims, verifies them against trusted sources, and displays concise verdicts with citations — all in under 5 seconds.
+Truthy listens to two speakers in a debate, transcribes their speech in real-time, detects factual claims, verifies them against trusted sources, and displays concise verdicts with citations — all in under 5 seconds.
 
 Built for the **Gemini + Fetch.ai Hackathon** to strengthen healthy democracies by grounding public discourse in shared, verifiable truth.
 
@@ -39,7 +39,7 @@ Built for the **Gemini + Fetch.ai Hackathon** to strengthen healthy democracies 
 
 1. **Clone and install dependencies**
    ```bash
-   cd truthstream
+   cd truthy
    npm install
    ```
 
@@ -84,7 +84,7 @@ Built for the **Gemini + Fetch.ai Hackathon** to strengthen healthy democracies 
 ## Project Structure
 
 ```
-truthstream/
+truthy/
 ├── app/
 │   ├── api/tools/              # Mock tool endpoints (vectara, web, context_check)
 │   ├── components/             # UI components (VerdictCard, TranscriptPanel, etc.)
@@ -173,10 +173,10 @@ Prisma schema is included but **not required for MVP**. To enable:
 
 ```bash
 # Build
-docker build -t truthstream .
+docker build -t truthy .
 
 # Run
-docker run -p 3000:3000 -e NEXT_PUBLIC_GEMINI_API_KEY=your_key truthstream
+docker run -p 3000:3000 -e NEXT_PUBLIC_GEMINI_API_KEY=your_key truthy
 ```
 
 ## Development
@@ -235,7 +235,7 @@ MIT License - see LICENSE file
 
 ## Support
 
-- Issues: [GitHub Issues](https://github.com/yourusername/truthstream/issues)
+- Issues: [GitHub Issues](https://github.com/yourusername/truthy/issues)
 - Docs: `docs/` folder (PRD, TDS, API.md, PROMPTS.md)
 - Demo video: [Link TBD]
 
