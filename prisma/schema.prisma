@@ -1,0 +1,91 @@
+// Prisma schema for Truthstream database
+// This is currently optional for the MVP; persistence can be added later
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id         String      @id @default(cuid())
+  startedAt  DateTime    @default(now()) @map("started_at")
+  endedAt    DateTime?   @map("ended_at")
+  transcripts Transcript[]
+  claims     Claim[]
+  verdicts   Verdict[]
+
+  @@map("sessions")
+}
+
+model Transcript {
+  id        String   @id @default(cuid())
+  sessionId String   @map("session_id")
+  speaker   String   // 'A' or 'B'
+  tsMs      Int      @map("ts_ms")
+  text      String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("transcripts")
+}
+
+model Claim {
+  id          String   @id @default(cuid())
+  sessionId   String   @map("session_id")
+  speaker     String   // 'A' or 'B'
+  tsMs        Int      @map("ts_ms")
+  rawText     String   @map("raw_text") @db.Text
+  normalized  Json?    // { topic, location, timeframe, quantity }
+  checkworthy Boolean  @default(true)
+  priority    String?  // 'low', 'medium', 'high'
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  session  Session    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  evidence Evidence[]
+  verdicts Verdict[]
+
+  @@index([sessionId])
+  @@map("claims")
+}
+
+model Evidence {
+  id        String   @id @default(cuid())
+  claimId   String   @map("claim_id")
+  publisher String
+  url       String
+  asOf      String   @map("as_of") // Store as string for flexibility (YYYY-MM-DD)
+  snippet   String   @db.Text
+  alignment String   // 'supports', 'contradicts', 'neutral'
+  score     Float    // 0.0 to 1.0
+  tier      String?  // 'primary', 'secondary', 'analysis', 'any'
+  createdAt DateTime @default(now()) @map("created_at")
+
+  claim Claim @relation(fields: [claimId], references: [id], onDelete: Cascade)
+
+  @@index([claimId])
+  @@map("evidence")
+}
+
+model Verdict {
+  id         String   @id @default(cuid())
+  claimId    String   @map("claim_id")
+  sessionId  String   @map("session_id")
+  label      String   // 'True', 'Mostly True', 'Mixed', 'Mostly False', 'False', 'Unverifiable'
+  confidence Float    // 0.0 to 1.0
+  rationale  String   @db.Text
+  sources    Json     // [{ name, url, as_of }]
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  claim   Claim   @relation(fields: [claimId], references: [id], onDelete: Cascade)
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([claimId])
+  @@index([sessionId])
+  @@map("verdicts")
+}
