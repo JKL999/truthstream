@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useDebateCore } from '@/app/hooks/useDebateCore';
 import SpeakerToggle from '@/app/components/SpeakerToggle';
 import LiveTranscriptDisplay from '@/app/components/LiveTranscriptDisplay';
@@ -31,6 +31,8 @@ export default function DebatePage() {
     debugMode,
   } = state;
 
+const verdictContainerRef = useRef<HTMLDivElement>(null);
+
   // Spacebar hotkey for speaker toggle
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -49,6 +51,13 @@ export default function DebatePage() {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [isRecording, activeSpeaker, actions]);
+
+  // Auto-scroll verdicts to bottom when new ones arrive
+  useEffect(() => {
+    if (verdictContainerRef.current) {
+      verdictContainerRef.current.scrollTop = verdictContainerRef.current.scrollHeight;
+    }
+  }, [verdicts]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-slate-900 to-gray-950 text-white">
@@ -191,7 +200,10 @@ export default function DebatePage() {
               Fact Checks
             </h2>
 
-            <div className="space-y-3 max-h-[calc(100vh-280px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+            <div
+              ref={verdictContainerRef}
+              className="space-y-3 max-h-[calc(100vh-280px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent"
+            >
               {verdicts.length === 0 ? (
                 <div className="text-gray-500 text-xs italic text-center py-6">
                   Verdicts will appear here as claims are detected...
