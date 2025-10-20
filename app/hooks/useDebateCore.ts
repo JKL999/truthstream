@@ -217,12 +217,16 @@ export function useDebateCore() {
         const bufferRef = speaker === 'A' ? textBufferARef : textBufferBRef;
         bufferRef.current += part.text;
 
+        console.log(`[${speaker}] 📨 Model text received:`, part.text);
+        console.log(`[${speaker}] 📝 Buffer state:`, bufferRef.current);
+
         // Remove markdown code fences
         let cleanText = bufferRef.current.replace(/```json\s*|\s*```/g, '').trim();
 
         // Try to find a complete JSON object with balanced braces
         const startIdx = cleanText.indexOf('{');
         if (startIdx !== -1) {
+          console.log(`[${speaker}] 🔍 Found JSON start at index ${startIdx}`);
           let braceCount = 0;
           let endIdx = -1;
 
@@ -237,8 +241,10 @@ export function useDebateCore() {
 
           if (endIdx !== -1) {
             const jsonStr = cleanText.substring(startIdx, endIdx);
+            console.log(`[${speaker}] 📦 Extracted JSON string:`, jsonStr);
             try {
               const parsed = JSON.parse(jsonStr);
+              console.log(`[${speaker}] ✅ JSON parsed successfully:`, parsed);
               if (parsed.claim && parsed.label && parsed.confidence !== undefined) {
                 const verdict: Verdict = {
                   speaker,
@@ -251,6 +257,7 @@ export function useDebateCore() {
                 };
                 setVerdicts((prev) => [...prev, verdict]);
                 updateStatus(`Verdict: ${verdict.label} (${(verdict.confidence * 100).toFixed(0)}%)`);
+                console.log(`[${speaker}] ⚖️ Verdict created and added to UI:`, verdict);
 
                 // Remove the parsed JSON from buffer (use original buffer, not cleanText)
                 const jsonInOriginal = bufferRef.current.indexOf('{');
@@ -270,12 +277,24 @@ export function useDebateCore() {
                     bufferRef.current = bufferRef.current.substring(origEndIdx).trim();
                   }
                 }
+              } else {
+                console.warn(`[${speaker}] ⚠️ Parsed JSON missing required fields:`, {
+                  hasClaim: !!parsed.claim,
+                  hasLabel: !!parsed.label,
+                  hasConfidence: parsed.confidence !== undefined,
+                  parsed
+                });
               }
             } catch (e) {
               // JSON parsing failed, keep accumulating
-              console.warn('JSON parsing failed:', e);
+              console.warn(`[${speaker}] ❌ JSON parsing failed:`, e);
+              console.warn(`[${speaker}] Failed JSON string:`, jsonStr);
             }
+          } else {
+            console.log(`[${speaker}] ⏳ JSON incomplete, waiting for more data...`);
           }
+        } else {
+          console.log(`[${speaker}] 📄 No JSON found in buffer (plain text response)`);
         }
       }
     }
