@@ -11,6 +11,10 @@ import { createBlob, decode, decodeAudioData } from '@/lib/audio';
 import { Analyser } from '@/lib/analyser';
 import { Speaker, Transcript, Verdict, DebateCoreState, DebateCoreActions } from '@/types';
 
+// Memory management constants - prevent unbounded array growth (BUG-007)
+const MAX_TRANSCRIPTS = 500; // Keep last 500 transcripts (~30-60 min of conversation)
+const MAX_VERDICTS = 100;     // Keep last 100 verdicts (most relevant fact-checks)
+
 const SYSTEM_INSTRUCTION = `You are Truthy, a neutral, real-time fact-checking agent for live debates. Your verdicts are displayed to a live audience.
 
 TASKS:
@@ -165,7 +169,11 @@ export function useDebateCore() {
           text: currentTranscription.trim(),
           timestamp: Date.now() - sessionStartTimeRef.current,
         };
-        setTranscripts((prev) => [...prev, transcript]);
+        // Sliding window: keep only the last MAX_TRANSCRIPTS items to prevent memory leak
+        setTranscripts((prev) => {
+          const updated = [...prev, transcript];
+          return updated.slice(-MAX_TRANSCRIPTS);
+        });
 
         // Clear current transcription
         if (speaker === 'A') {
@@ -255,7 +263,11 @@ export function useDebateCore() {
                   sources: parsed.sources || [],
                   timestamp: Date.now() - sessionStartTimeRef.current,
                 };
-                setVerdicts((prev) => [...prev, verdict]);
+                // Sliding window: keep only the last MAX_VERDICTS items to prevent memory leak
+                setVerdicts((prev) => {
+                  const updated = [...prev, verdict];
+                  return updated.slice(-MAX_VERDICTS);
+                });
                 updateStatus(`Verdict: ${verdict.label} (${(verdict.confidence * 100).toFixed(0)}%)`);
                 console.log(`[${speaker}] ⚖️ Verdict created and added to UI:`, verdict);
 
@@ -462,7 +474,11 @@ export function useDebateCore() {
         text: currentTranscriptionB.trim(),
         timestamp: Date.now() - sessionStartTimeRef.current,
       };
-      setTranscripts((prev) => [...prev, transcript]);
+      // Sliding window: keep only the last MAX_TRANSCRIPTS items to prevent memory leak
+      setTranscripts((prev) => {
+        const updated = [...prev, transcript];
+        return updated.slice(-MAX_TRANSCRIPTS);
+      });
       setCurrentTranscriptionB('');
     } else if (speaker === 'B' && currentTranscriptionA.trim()) {
       // Switching TO B, so finalize A's current transcription
@@ -471,7 +487,11 @@ export function useDebateCore() {
         text: currentTranscriptionA.trim(),
         timestamp: Date.now() - sessionStartTimeRef.current,
       };
-      setTranscripts((prev) => [...prev, transcript]);
+      // Sliding window: keep only the last MAX_TRANSCRIPTS items to prevent memory leak
+      setTranscripts((prev) => {
+        const updated = [...prev, transcript];
+        return updated.slice(-MAX_TRANSCRIPTS);
+      });
       setCurrentTranscriptionA('');
     }
 
@@ -502,7 +522,11 @@ export function useDebateCore() {
       text: text.trim(),
       timestamp: Date.now() - sessionStartTimeRef.current,
     };
-    setTranscripts((prev) => [...prev, transcript]);
+    // Sliding window: keep only the last MAX_TRANSCRIPTS items to prevent memory leak
+    setTranscripts((prev) => {
+      const updated = [...prev, transcript];
+      return updated.slice(-MAX_TRANSCRIPTS);
+    });
 
     // Also send to the session for processing
     const activeSession = activeSpeaker === 'A' ? sessionARef.current : sessionBRef.current;
