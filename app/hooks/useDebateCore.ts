@@ -411,6 +411,23 @@ export function useDebateCore() {
         );
         sourceNodeRef.current.connect(inputNodeRef.current);
 
+        // WARNING: ScriptProcessorNode is DEPRECATED
+        // The Web Audio API has deprecated ScriptProcessorNode in favor of AudioWorkletNode.
+        // ScriptProcessorNode runs on the main thread and can cause performance issues/audio glitches.
+        // Browsers may remove support in future versions.
+        //
+        // TODO: Migrate to AudioWorkletNode (BUG-009)
+        // Migration steps:
+        // 1. Create a separate audio worklet processor file (e.g., audio-processor.js)
+        // 2. Use audioContext.audioWorklet.addModule() to load the worklet
+        // 3. Create AudioWorkletNode instead of ScriptProcessorNode
+        // 4. Use message passing between main thread and worklet
+        // See /docs/AUDIO_MIGRATION.md for detailed migration guide
+        console.warn(
+          '[DEPRECATION WARNING] Using deprecated ScriptProcessorNode. ' +
+          'This should be migrated to AudioWorkletNode. See BUG-009 and /docs/AUDIO_MIGRATION.md'
+        );
+
         scriptProcessorNodeRef.current = inputAudioContextRef.current.createScriptProcessor(
           256,
           1,
@@ -443,7 +460,10 @@ export function useDebateCore() {
     setIsRecording(false);
     isRecordingRef.current = false;
 
+    // Clean up deprecated ScriptProcessorNode
+    // TODO: Update this cleanup when migrating to AudioWorkletNode (BUG-009)
     if (scriptProcessorNodeRef.current && sourceNodeRef.current) {
+      scriptProcessorNodeRef.current.onaudioprocess = null; // Clear event handler to prevent memory leaks
       scriptProcessorNodeRef.current.disconnect();
       sourceNodeRef.current.disconnect();
     }
