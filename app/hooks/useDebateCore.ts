@@ -6,7 +6,7 @@
 'use client';
 
 import { GoogleGenAI, LiveServerMessage, Modality, Session } from '@google/genai';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { createBlob, decode, decodeAudioData } from '@/lib/audio';
 import { Analyser } from '@/lib/analyser';
 import { Speaker, Transcript, Verdict, DebateCoreState, DebateCoreActions } from '@/types';
@@ -485,7 +485,7 @@ export function useDebateCore() {
     initSessions();
   };
 
-  const handleSetActiveSpeaker = (speaker: Speaker) => {
+  const handleSetActiveSpeaker = useCallback((speaker: Speaker) => {
     // Flush current transcription from the previous speaker before switching
     if (speaker === 'A' && currentTranscriptionB.trim()) {
       // Switching TO A, so finalize B's current transcription
@@ -522,7 +522,7 @@ export function useDebateCore() {
     if (isRecording) {
       updateStatus(`Switched to Speaker ${speaker}`);
     }
-  };
+  }, [currentTranscriptionA, currentTranscriptionB, isRecording]);
 
   const toggleDebugMode = () => {
     setDebugMode((prev) => !prev);

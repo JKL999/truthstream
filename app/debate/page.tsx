@@ -50,7 +50,7 @@ const verdictContainerRef = useRef<HTMLDivElement>(null);
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isRecording, activeSpeaker, actions]);
+  }, [isRecording, activeSpeaker, actions.setActiveSpeaker]);
 
   // Auto-scroll verdicts to bottom when new ones arrive
   useEffect(() => {
